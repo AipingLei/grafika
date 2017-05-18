@@ -20,12 +20,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -45,6 +48,7 @@ public class ContentManager {
     //       depending on the movies being added in tag-order.  Could also just use a plain array.
     public static final int MOVIE_EIGHT_RECTS = 0;
     public static final int MOVIE_SLIDERS = 1;
+    Bitmap mBitmap;
 
     private static final int[] ALL_TAGS = new int[] {
             MOVIE_EIGHT_RECTS,
@@ -126,11 +130,16 @@ public class ContentManager {
         AlertDialog.Builder builder = WorkDialog.create(caller, R.string.preparing_content);
         builder.setCancelable(false);
         AlertDialog dialog = builder.show();
-
+        try {
+            mBitmap = BitmapFactory.decodeStream(caller.getResources().getAssets().open("texture/fengj.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // Generate content in async task.
         GenerateTask genTask = new GenerateTask(caller, dialog, tags);
         genTask.execute();
     }
+
 
     /**
      * Returns the specified item.
@@ -157,10 +166,11 @@ public class ContentManager {
                 }
                 break;
             case MOVIE_SLIDERS:
-                movie = new MovieSliders();
-                movie.create(getPath(tag), prog);
+                MoviePhotoSliders movie2 = new MoviePhotoSliders();
+                movie2.setBitmap(mBitmap);
+                movie2.create(getPath(tag), prog);
                 synchronized (mContent) {
-                    mContent.add(tag, movie);
+                    mContent.add(tag, movie2);
                 }
                 break;
             default:

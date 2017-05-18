@@ -38,7 +38,7 @@ import java.util.Map;
  */
 public class MainActivity extends ListActivity {
     public static final String TAG = "Grafika";
-
+    static MainActivity mainActivity;
     // map keys
     private static final String TITLE = "title";
     private static final String DESCRIPTION = "description";
@@ -129,7 +129,7 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mainActivity =this;
         // One-time singleton initialization; requires activity context to get file location.
         ContentManager.initialize(this);
 

@@ -16,11 +16,13 @@
 
 package com.android.grafika.gles;
 
+import android.content.res.Resources;
 import android.opengl.GLES20;
 import android.opengl.GLES30;
 import android.opengl.Matrix;
 import android.util.Log;
 
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -98,6 +100,25 @@ public class GlUtil {
             shader = 0;
         }
         return shader;
+    }
+
+    public static int createProgram(Resources res, String vertexRes, String fragmentRes){
+        return createProgram(loadFromAssetsFile(vertexRes,res),loadFromAssetsFile(fragmentRes,res));
+    }
+
+    public static String loadFromAssetsFile(String fname, Resources res){
+        StringBuilder result=new StringBuilder();
+        try{
+            InputStream is=res.getAssets().open(fname);
+            int ch;
+            byte[] buffer=new byte[1024];
+            while (-1!=(ch=is.read(buffer))){
+                result.append(new String(buffer,0,ch));
+            }
+        }catch (Exception e){
+            return null;
+        }
+        return result.toString().replaceAll("\\r\\n","\n");
     }
 
     /**

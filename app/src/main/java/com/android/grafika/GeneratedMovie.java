@@ -16,6 +16,7 @@
 
 package com.android.grafika;
 
+import android.graphics.Bitmap;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
@@ -248,4 +249,5 @@ public abstract class GeneratedMovie implements Content {
             }
         }
     }
+
 }
